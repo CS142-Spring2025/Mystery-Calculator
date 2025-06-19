@@ -1,0 +1,109 @@
+# Mystery-Calculator
+A spy calculator like no other / Mission Impossible Simulation
+
+## Overview
+This project implements a spy-themed calculator application with hidden Easter eggs, using Java Swing for GUI. It includes:
+- A fully-functional calculator interface
+- A hidden Pong game
+- A mission briefing system with timed spy messages
+
+---
+
+## 🔹 File: MysteryCalculator.java
+
+### Purpose
+Main GUI and logic for the calculator, including:
+- Basic arithmetic handling
+- Easter eggs triggered by special input sequences
+- Rounded interactive buttons
+
+### Key Components
+- **Calculator Dimensions**: 600x700 window
+- **Colors**: Custom theme using dark greys and orange for operation buttons
+- **Button Values**: 20 GUI buttons including numbers, operators, and controls
+- **KeyListener**: Allows keyboard-based inputs mapped to GUI
+
+### Hidden Easter Eggs
+- Input `123456789` then press `.` → Launches the Pong game
+- Input `123789456` then press `.` → Triggers spy mission briefing sequence
+
+### Timed Mission Logic
+```java
+displayLabel.setText(FortuneEngine.getAccessMessage());
+new Timer(1000, e -> displayLabel.setText(FortuneEngine.getWelcomeMessage())).start();
+new Timer(3000, e -> displayLabel.setText("> " + FortuneEngine.getMission())).start();
+new Timer(5000, e -> displayLabel.setText(FortuneEngine.getGoodbyeMessage())).start();
+```
+This gives cinematic pacing to the spy interaction.
+
+---
+
+## 🔸 File: FortuneEngine.java
+
+### Purpose
+Generates timed spy-style mission briefings.
+
+### Methods
+- `getAccessMessage()` – returns `"Access Granted"`
+- `getWelcomeMessage()` – returns `"Welcome Agent, your next mission is:"`
+- `getMission()` – returns a randomly selected mission
+- `getGoodbyeMessage()` – returns `"Goodbye Agent, Be Careful out there"`
+
+### Example Mission:
+> `"Track the rogue agent’s signal across the border."`
+
+---
+
+## 🔺 File: PongGame.java
+
+### Purpose
+A vertical AI-mode Pong game launched secretly from the calculator.
+
+### Features
+- Uses `Timer` for real-time game loop
+- Two paddles: AI (top) and Player (bottom)
+- Paddle movement with left/right arrow keys
+- Collision and scoring logic
+
+### Launch Integration
+```java
+PongGame.launch(frame, () -> {
+    displayLabel.setText("SCORE : " + PongGame.lastScore);
+}, boardWidth, boardHeight);
+```
+
+### Launch Trigger:
+Entered in calculator: `123456789` then press `.`
+
+---
+
+## ✨ RoundedButton Class (in MysteryCalculator.java)
+
+### Purpose
+Custom JButton that:
+- Uses antialiasing for smooth round edges
+- Fills with gradient colors
+- Changes color when pressed for visual feedback
+
+---
+
+## Usage Instructions
+
+1. **Compile All Files Together**:
+```bash
+javac MysteryCalculator.java FortuneEngine.java PongGame.java
+```
+
+2. **Run the Calculator**:
+```bash
+java MysteryCalculator
+```
+
+3. **Try the Easter Eggs**:
+- Type `123456789` + `.` → Pong Game
+- Type `123789456` + `.` → Spy Mission Briefing
+
+---
+
+
+
