@@ -1,43 +1,36 @@
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.Timer;
 
 public class MysteryCalculator {
-    int boardWidth = 360;
-    int boardHeight = 540;
+    public int boardWidth = 600;
+    public int boardHeight = 700;
 
-    Color customLightGray = new Color(230, 230, 230);
-    Color customDarkGray = new Color(60, 60, 60);
-    Color customBlack = new Color(20, 20, 20);
-    Color customOrange = new Color(255, 149, 0);
+    public Color customLightGray = new Color(230, 230, 230);
+    public Color customDarkGray = new Color(60, 60, 60);
+    public Color customBlack = new Color(20, 20, 20);
+    public Color customOrange = new Color(255, 149, 0);
 
-    String[] buttonValues = {
-            "AC", "+/-", "%", "÷",
-            "7", "8", "9", "×",
-            "4", "5", "6", "-",
-            "1", "2", "3", "+",
-            "0", ".", "←", "="
-    };
-    Set<String> validKeys = new HashSet<>(Arrays.asList(
-            "0","1","2","3","4","5","6","7","8","9",
-            "+","-","*","/","×","÷",".","=","←","AC"
-    ));
-    String[] rightSymbols = {"÷", "×", "-", "+", "="};
-    String[] topSymbols = {"AC", "+/-", "%"};
+    public String[] buttonValues = { "AC", "+/-", "%", "÷", "7", "8", "9", "×", "4", "5", "6", "-", "1", "2", "3", "+", "0", ".", "←", "=" };
+    public Set<String> validKeys = new HashSet<>(Arrays.asList("0","1","2","3","4","5","6","7","8","9","+","-","*","/","×","÷",".","=","←","AC"));
+    public String[] rightSymbols = {"÷", "×", "-", "+", "="};
+    public String[] topSymbols = {"AC", "+/-", "%"};
 
-    JFrame frame = new JFrame("Calculator With Pong");
-    JLabel displayLabel = new JLabel();
-    JPanel displayPanel = new JPanel();
-    JPanel buttonsPanel = new JPanel();
-    Map<String, JButton> buttonMap = new HashMap<>();
-    boolean justShowedScore = false;
+    public JFrame frame = new JFrame("Calculator With Pong");
+    public JLabel displayLabel = new JLabel();
+    public JPanel displayPanel = new JPanel();
+    public JPanel buttonsPanel = new JPanel();
+    public Map<String, JButton> buttonMap = new HashMap<>();
+    public boolean justShowedScore = false;
 
-    String A = "0";
-    String operator = null;
-    String B = null;
-    boolean enteringSecondNumber = false;
+    public String A = "0";
+    public String operator = null;
+    public String B = null;
+    public boolean enteringSecondNumber = false;
 
     public MysteryCalculator() {
         frame.setSize(boardWidth, boardHeight);
@@ -121,13 +114,13 @@ public class MysteryCalculator {
         frame.setVisible(true);
     }
 
-    void pressFromKey(String label) {
+    public void pressFromKey(String label) {
         if (buttonMap.containsKey(label)) {
             buttonMap.get(label).doClick();
         }
     }
 
-    void handleButtonPress(String buttonValue) {
+    public void handleButtonPress(String buttonValue) {
         if (Arrays.asList(rightSymbols).contains(buttonValue)) {
             if (buttonValue.equals("=")) {
                 if (A != null && operator != null) {
@@ -154,18 +147,13 @@ public class MysteryCalculator {
             }
         } else if (Arrays.asList(topSymbols).contains(buttonValue)) {
             switch (buttonValue) {
-                case "AC":
-                    clearAll();
-                    displayLabel.setText("0");
-                    break;
+                case "AC": clearAll(); displayLabel.setText("0"); break;
                 case "+/-":
                     double neg = Double.parseDouble(displayLabel.getText()) * -1;
-                    displayLabel.setText(removeZeroDecimal(neg));
-                    break;
+                    displayLabel.setText(removeZeroDecimal(neg)); break;
                 case "%":
                     double percent = Double.parseDouble(displayLabel.getText()) / 100;
-                    displayLabel.setText(removeZeroDecimal(percent));
-                    break;
+                    displayLabel.setText(removeZeroDecimal(percent)); break;
             }
         } else if (buttonValue.equals(".")) {
             String current = displayLabel.getText();
@@ -178,9 +166,18 @@ public class MysteryCalculator {
                     justShowedScore = true;
                 }, boardWidth, boardHeight);
             } else if (current.equals("123789456")) {
-                displayLabel.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-                displayLabel.setText(FortuneEngine.getRandomQuote());
+                displayLabel.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+                displayLabel.setText(FortuneEngine.getAccessMessage());
                 justShowedScore = true;
+
+                Timer t1 = new Timer(1000, e -> displayLabel.setText(FortuneEngine.getWelcomeMessage()));
+                t1.setRepeats(false); t1.start();
+
+                Timer t2 = new Timer(3000, e -> displayLabel.setText("> " + FortuneEngine.getMission()));
+                t2.setRepeats(false); t2.start();
+
+                Timer t3 = new Timer(6000, e -> displayLabel.setText(FortuneEngine.getGoodbyeMessage()));
+                t3.setRepeats(false); t3.start();
             } else if (!current.contains(".")) {
                 displayLabel.setText(current + ".");
             }
@@ -198,7 +195,7 @@ public class MysteryCalculator {
         }
     }
 
-    void clearAll() {
+    public void clearAll() {
         A = "0";
         operator = null;
         B = null;
@@ -206,7 +203,7 @@ public class MysteryCalculator {
         displayLabel.setFont(new Font("Segoe UI", Font.BOLD, 50));
     }
 
-    String removeZeroDecimal(double number) {
+    public String removeZeroDecimal(double number) {
         if (number % 1 == 0) return String.valueOf((int) number);
         return String.valueOf(number);
     }
@@ -219,9 +216,9 @@ public class MysteryCalculator {
 class RoundedButton extends JButton {
     public RoundedButton(String text) {
         super(text);
-        setContentAreaFilled(false);
         setFocusPainted(false);
         setBorderPainted(false);
+        setContentAreaFilled(false);
     }
 
     @Override
@@ -235,6 +232,7 @@ class RoundedButton extends JButton {
             GradientPaint gradient = new GradientPaint(0, 0, base.brighter(), 0, getHeight(), base.darker());
             g2.setPaint(gradient);
         }
+
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), 30, 30);
         g2.dispose();
         super.paintComponent(g);
